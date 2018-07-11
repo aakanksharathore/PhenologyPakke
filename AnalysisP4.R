@@ -27,22 +27,24 @@ RainMean = tapply(datR$Rainfall,list(datR$date),FUN = mean)
 RainMean=RainMean[match(mmyr, as.factor(rownames(RainMean)))]  #Correct the sequence of months and year
 
 #Graph
-x=1:length(na.omit(rownames(RainMean)))
+lbl= seq(1,length(mmyr),by=6)                    #1:length(na.omit(rownames(RainMean)))
+x=1:length(mmyr)
+
 png("Graphs//RainfallMean.png",width=1080,height=720,units = "px", pointsize = 20)
-plot(x,na.omit(as.vector(RainMean)),xaxt="n",xlab="Months",ylab="Rainfall in mm",type="b",pch=20,col="navy")
+plot(x,as.vector(RainMean),xaxt="n",xlab="",ylab="Rainfall in mm",type="b",pch=20,col="navy")
 #points(x,na.omit(as.vector(RainMin)),xaxt="n",type="b",pch=20,col="red",lty=2)
 #points(x,na.omit(as.vector(RainMax)),xaxt="n",type="b",pch=20,col="green",lty=2)
 #legend("topright", legend=c("Minimum monthly rainfall", "Mean monthly rainfall","Maximum monthly rainfall"),col=c("red", "navy","green"), lty=c(2,1,2),pch=c(20,20,20), cex=0.8)
-axis(1, at=x, labels=na.omit(rownames(RainMean)))
+axis(1, at=lbl, labels=mmyr[lbl],las=2)
 dev.off();
 
-x=1:length(na.omit(rownames(RainMax)))
+
 png("Graphs//RainfallMaxMin.png",width=1080,height=720,units = "px", pointsize = 20)
-plot(x,na.omit(as.vector(RainMax)),xaxt="n",xlab="Months",ylab="Rainfall in mm",type="b",pch=20,col="navy")
-points(x,na.omit(as.vector(RainMin)),xaxt="n",type="b",pch=20,col="orange",lty=1)
+plot(x,as.vector(RainMax),xaxt="n",xlab="",ylab="Rainfall in mm",type="b",pch=20,col="navy")
+points(x,as.vector(RainMin),xaxt="n",type="b",pch=20,col="orange",lty=1)
 #points(x,na.omit(as.vector(RainMax)),xaxt="n",type="b",pch=20,col="green",lty=2)
 legend("topright", legend=c("Maximum monthly rainfall", "Minimum monthly rainfall"),col=c("navy", "orange"), lty=c(2,1),pch=c(20,20), cex=0.8)
-axis(1, at=x, labels=na.omit(rownames(RainMean)))
+axis(1, at=lbl, labels=mmyr[lbl],las=2)
 dev.off();
 #######################################################################################################
 
@@ -69,18 +71,18 @@ TempMean=TempMean[match(mmyr, as.factor(rownames(TempMean)))]
 #Graph
 x=1:length(na.omit(names(TempMax)))
 png("Graphs//Temperature.png",width=1080,height=720,units = "px", pointsize = 20)
-plot(x,na.omit(as.vector(TempMax)),xaxt="n",xlab="Months",ylab="Temperature",type="b",pch=20,col="navy",ylim=c(min(na.omit(datT$Temp)),max(na.omit(datT$Temp))))
+plot(x,na.omit(as.vector(TempMax)),xaxt="n",xlab="",ylab="Temperature",type="b",pch=20,col="navy",ylim=c(min(na.omit(datT$Temp)),max(na.omit(datT$Temp))))
 points(x,na.omit(as.vector(TempMin)),xaxt="n",type="b",pch=20,col="red",lty=2)
 legend("topright", legend=c("Maximum average daily temperature", "Minimum average daily temperature"),col=c("navy", "red"), lty=c(2,1),pch=c(20,20), cex=0.8)
-axis(1, at=x, labels=na.omit(names(TempMax)))
+axis(1, at=lbl, labels=mmyr[lbl],las=2)
 dev.off()
 
 x=1:length(na.omit(names(TempMean)))
 png("Graphs//TemperatureMean.png",width=1080,height=720,units = "px", pointsize = 20)
-plot(x,na.omit(as.vector(TempMean)),xaxt="n",xlab="Months",ylab="Temperature",type="b",pch=20,col="navy")
+plot(x,na.omit(as.vector(TempMean)),xaxt="n",xlab="",ylab="Temperature",type="b",pch=20,col="navy")
 #points(x,na.omit(as.vector(TempMin)),xaxt="n",type="b",pch=20,col="red",lty=2)
 #legend("topright", legend=c("Maximum average daily temperature", "Minimum average daily temperature"),col=c("navy", "red"), lty=c(2,1),pch=c(20,20), cex=0.8)
-axis(1, at=x, labels=na.omit(names(TempMean)))
+axis(1, at=lbl, labels=mmyr[lbl],las=2)
 dev.off()
 
 ######################################################################################################
@@ -102,8 +104,8 @@ Imean=Imean[match(mmyr, as.factor(rownames(Imean)))]
 #Graph
 x=1:length(na.omit(names(Imean)))
 png("Graphs//Irradiance.png",width=1080,height=720,units = "px", pointsize = 20)
-plot(x,na.omit(as.vector(Imean)),xaxt="n",xlab="Months",ylab="Mean monthly irradiance",type="b",pch=20,col="navy")
-axis(1, at=x, labels=na.omit(names(Imean)))
+plot(x,na.omit(as.vector(Imean)),xaxt="n",xlab="",ylab="Mean monthly irradiance",type="b",pch=20,col="navy")
+axis(1, at=lbl, labels=mmyr[lbl],las=2)
 dev.off()
 
 ####################################################################################################
@@ -126,7 +128,7 @@ RHMean=RHMean[match(mmyr, as.factor(rownames(RHMean)))]
 #Graph
 x=1:length(na.omit(names(RHMean)))
 png("Graphs//RH.png",width=1080,height=720,units = "px", pointsize = 20)
-plot(x,na.omit(as.vector(RHMean)),xaxt="n",xlab="Months",ylab="Average Relative Humidity",type="b",pch=20,col="navy")
-axis(1, at=x, labels=na.omit(names(RHMean)))
+plot(x,na.omit(as.vector(RHMean)),xaxt="n",xlab="",ylab="Average Relative Humidity",type="b",pch=20,col="navy")
+axis(1, at=lbl, labels=mmyr[lbl],las=2)
 dev.off()
 
