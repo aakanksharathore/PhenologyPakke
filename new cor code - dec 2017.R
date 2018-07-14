@@ -43,6 +43,13 @@ parms=c("monthly.Rain","mean.min.Temp","mean.max.Temp")  #previous 6 month rainf
 #Create data frame for flower bud and weather correlation
 df_FlB<- data.frame(label=c(1:54), est_max.rad=rep(NA, length=54), p_max.rad=rep(NA, length=54), est_mon.rain=rep(NA, length=54), p_mom.rain=rep(NA, length=54), est_temp=rep(NA, length=54), p_temp=rep(NA, length=54), est_min.temp=rep(NA, length=54), p_min.temp=rep(NA, length=54), est_max.temp=rep(NA, length=54), p_max.temp=rep(NA, length=54), est_RH=rep(NA, length=54), p_RH=rep(NA, length=54), est_wind=rep(NA, length=54), p_wind=rep(NA, length=54), est_gust=rep(NA, length=54), p_gust=rep(NA, length=54), est_rainy.days=rep(NA, length=54), p_rainy.days=rep(NA, length=54)) 
 
+#### Code for Flowering and weather correlation
+datFl=merged.dat[[merged.dat$Fl[]==1 | merged.dat$Fl==0]]
+Fl1=tapply(as.numeric(paste(datFl$Fl)),list(datFl$Year,datFl$Month),FUN=sum)
+FlT=tapply(as.numeric(paste(datFl$Fl)),list(datFl$Year,datFl$Month),FUN=length)
+FlP=Fl1/FlT
+
+
 for(k in 1:54){
   j=1  
 for (i in 1:9){

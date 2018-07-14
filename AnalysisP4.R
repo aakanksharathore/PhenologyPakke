@@ -4,7 +4,7 @@
 # Set working directory
 setwd("/media/aakanksha/f41d5ac2-703c-4b56-a960-cd3a54f21cfb/aakanksha/Documents/Backup/PhenologyAnalysis")
 
-dat=read.csv("Apr2011- May 2018Weatherdata .csv")
+dat=read.csv("Apr2011-May2018Weatherdata.csv")
 str(dat)
 mms = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
 mms=factor(mms,levels=mms)
@@ -16,6 +16,8 @@ nyr=length(yrs)
 dat$date=paste(dat$Month,dat$Year)
 timel=unique(dat$date)
 
+
+
 #################################################################################################
 #Rainfall time-series
 datR=dat[!is.na(dat$Rainfall),]
@@ -25,6 +27,13 @@ RainMax = tapply(datR$Rainfall,list(datR$date),FUN = max)
 RainMax=RainMax[match(mmyr, as.factor(rownames(RainMax)))]  #Correct the sequence of months and year
 RainMean = tapply(datR$Rainfall,list(datR$date),FUN = mean)
 RainMean=RainMean[match(mmyr, as.factor(rownames(RainMean)))]  #Correct the sequence of months and year
+TRain=tapply(datR$Rainfall,list(datR$date),FUN=sum)    #Monthly total rain
+TRain=TRain[match(mmyr, as.factor(rownames(TRain)))]
+##previous 6-months rainfall
+TSRain=vector(mode="numeric",length=(length(TRain)-6))
+for(i in 7:length(TRain)){
+TSRain[i-6]=sum(na.omit(as.numeric(TRain[(i-6):i])))  
+}
 
 #Graph
 lbl= seq(1,length(mmyr),by=6)                    #1:length(na.omit(rownames(RainMean)))
@@ -100,7 +109,15 @@ for(i in 1:nrow(x)){
 Imean = tapply(x$value,list(paste(x$Month,x$Year)),FUN = mean)
 Imean=Imean[match(mmyr, as.factor(rownames(Imean)))]
 
-
+##Daylength
+datDL=datI[dat$SolarRadiation !=0.6,]
+DL=tapply(datDL$SolarRadiation,list(datDL$Date),length)
+x=as.data.frame(melt(DL))
+for(i in 1:nrow(x)){
+  x[i,"Month"]=datDL[which(datDL$Date==x[i,1])[1],"Month"]
+  x[i,"Year"]=datDL[which(datDL$Date==x[i,1])[1],"Year"]
+}
+AvgDL=tapply(x$value,list(paste(x$Month,x$Year)),FUN=mean)
 #Graph
 x=1:length(na.omit(names(Imean)))
 png("Graphs//Irradiance.png",width=1080,height=720,units = "px", pointsize = 20)

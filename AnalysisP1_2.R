@@ -426,3 +426,92 @@ for(i in 2:length(colnames(ftP))){
 
 
 
+####################################################################################################
+###############################       PART 3      #################################################
+###################################################################################################
+# Weather data correlation with phenology patterns
+
+## This part will use data generated from code AnalysisP4.R (weather summary code)
+
+##Convert phenology to matrix to a dataframe with same key as weather data frame i.e. Month Year
+len=nrow(RfrP)*ncol(RfrP)
+dRfr = data.frame(Date=rep(NA, length=len),Rfr=rep(NA, length=len))
+
+##Insert Ripe fruit percentages in new data frame
+k=1
+for(i in 1:nrow(RfrP)){
+  for(j in 1:ncol(RfrP)){
+    dRfr$Date[k]=paste(colnames(RfrP)[j],rownames(RfrP)[i])
+    dRfr$Rfr[k]=RfrP[i,j]*100
+    k=k+1
+  }
+  
+}
+
+##Insert flowering percentages
+
+#Proportion of flowering trees in each month (both flowers and flower buds together)
+dat$Date=paste(dat$Month,dat$Year)
+datF=dat[dat$Fl==1 | dat$Fl==0 | dat$FlB==1 | dat$FlB==0,]
+datF=datF[datF$Fl==1 | datF$FlB==1,]
+datF$FL=rep(1,nrow(datF))
+FT=tapply(as.numeric(paste(dat$Fl)),list(dat$Date),FUN=length)
+F1=tapply(as.numeric(paste(datF$Fl)),list(datF$Date),FUN=length)
+FP=(F1/FT)*100
+
+len=nrow(FP)
+dFl = data.frame(Date=rep(NA, length=len),Rfr=rep(NA, length=len))
+
+dFl = cbind(Date=names(FP),Fl=as.numeric(FP))
+
+
+##Correlations
+
+##Temperature
+TempMin
+TempMax
+dTMin=cbind(Date=names(TempMin),Value=as.numeric(TempMin))
+dTMax=cbind(Date=names(TempMax),Value=as.numeric(TempMax))
+
+##Total rainfall and last 6 month rainfall
+TRain
+TSRain=append(rep("NA",6),TSRain)
+dTRain=cbind(Date=names(TRain),TRain=as.numeric(TRain),TSRain)
+
+#Daylength
+AvgDL
+DL=cbind(Date=names(AvgDL),Value=as.numeric(AvgDL))
+
+## 1.1 Fruiting with Total Rainfall
+
+Fr_TR = merge(dRfr,dTRain,by="Date")
+corFr_TR=cor.test(Fr_TR$Rfr,as.numeric(paste(Fr_TR$TRain)))
+ #1.2 Flowerinf with Total Rainfall
+Fl_TR = merge(dFl,dTRain,by="Date")
+corFl_TR=cor.test(as.numeric(Fl_TR$Fl),as.numeric(paste(Fl_TR$TRain)))
+
+## 2.1 Fruiting with last 6 months Rainfall
+corFr_TS=cor.test(Fr_TR$Rfr,as.numeric(paste(Fr_TR$TSRain)))
+#2.2 Flowerinf with past 6 months Rainfall
+corFl_TS=cor.test(as.numeric(Fl_TR$Fl),as.numeric(paste(Fl_TR$TSRain)))
+
+## 3.1 Fruiting with monthly min-max temperature
+
+Fr_Tmin = merge(dRfr,dTMin,by="Date")
+corFr_Tmin=cor.test(Fr_Tmin$Rfr,as.numeric(paste(Fr_Tmin$Value)))
+Fr_Tmax = merge(dRfr,dTMax,by="Date")
+corFr_Tmax=cor.test(Fr_Tmax$Rfr,as.numeric(paste(Fr_Tmax$Value)))
+#3.2 Flowerinf with Total Rainfall
+Fl_Tmin = merge(dFl,dTMin,by="Date")
+corFl_Tmin=cor.test(as.numeric(Fl_Tmin$Fl),as.numeric(paste(Fl_Tmin$Value)))
+Fl_Tmax = merge(dFl,dTMax,by="Date")
+corFl_Tmax=cor.test(as.numeric(Fl_Tmax$Fl),as.numeric(paste(Fl_Tmax$Value)))
+
+## 4.1 Fruiting with Daylength
+
+Fr_DL = merge(dRfr,DL,by="Date")
+corFr_DL=cor.test(Fr_DL$Rfr,as.numeric(paste(Fr_DL$Value)))
+#1.2 Flowerinf with Total Rainfall
+Fl_DL = merge(dFl,DL,by="Date")
+corFl_DL=cor.test(as.numeric(Fl_DL$Fl),as.numeric(paste(Fl_DL$Value)))
+
