@@ -431,7 +431,7 @@ for(i in 2:length(colnames(ftP))){
 ###################################################################################################
 # Weather data correlation with phenology patterns
 
-## This part will use data generated from code AnalysisP4.R (weather summary code)
+
 
 ##Convert phenology to matrix to a dataframe with same key as weather data frame i.e. Month Year
 len=nrow(RfrP)*ncol(RfrP)
@@ -466,7 +466,7 @@ dFl = cbind(Date=names(FP),Fl=as.numeric(FP))
 
 
 ##Correlations
-
+## This part will use data generated from code AnalysisP4.R (weather summary code)
 ##Temperature
 TempMin
 TempMax
@@ -485,33 +485,109 @@ DL=cbind(Date=names(AvgDL),Value=as.numeric(AvgDL))
 ## 1.1 Fruiting with Total Rainfall
 
 Fr_TR = merge(dRfr,dTRain,by="Date")
-corFr_TR=cor.test(Fr_TR$Rfr,as.numeric(paste(Fr_TR$TRain)))
- #1.2 Flowerinf with Total Rainfall
+corFr_TR=cor.test(as.numeric(paste(Fr_TR$TRain)),Fr_TR$Rfr)
+
+png("Graphs//CorrFr_TR.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fr_TR$TRain)),Fr_TR$Rfr,ylab="% trees in ripe fruit",xlab="Total monthly rainfall",pch=20,col="navy")
+abline(lm(Fr_TR$Rfr~as.numeric(paste(Fr_TR$TRain))), col="red")
+mtext(paste(" p-value = ",corFr_TR$p.value))
+dev.off()
+
+
+#1.2 Flowerinf with Total Rainfall
 Fl_TR = merge(dFl,dTRain,by="Date")
-corFl_TR=cor.test(as.numeric(Fl_TR$Fl),as.numeric(paste(Fl_TR$TRain)))
+corFl_TR=cor.test(as.numeric(paste(Fl_TR$TRain)),as.numeric(paste(Fl_TR$Fl)))
+
+png("Graphs//CorrFl_TR.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fl_TR$TRain)),as.numeric(paste(Fl_TR$Fl)),ylab="% trees in flower",xlab="Total monthly rainfall",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fl_TR$Fl))~as.numeric(paste(Fl_TR$TRain))), col="red")
+mtext(paste(" p-value = ",corFl_TR$p.value))
+dev.off()
 
 ## 2.1 Fruiting with last 6 months Rainfall
-corFr_TS=cor.test(Fr_TR$Rfr,as.numeric(paste(Fr_TR$TSRain)))
+corFr_TS=cor.test(as.numeric(paste(Fr_TR$TSRain)),Fr_TR$Rfr)
+
+png("Graphs//CorrFr_TS.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fr_TR$TSRain)),as.numeric(paste(Fr_TR$Rfr)),ylab="% trees in fruits",xlab="Last 6 months rainfall",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fr_TR$Rfr))~as.numeric(paste(Fr_TR$TSRain))), col="red")
+mtext(paste(" p-value = ",corFr_TS$p.value))
+dev.off()
 #2.2 Flowerinf with past 6 months Rainfall
-corFl_TS=cor.test(as.numeric(Fl_TR$Fl),as.numeric(paste(Fl_TR$TSRain)))
+corFl_TS=cor.test(as.numeric(paste(Fl_TR$TSRain)),as.numeric(paste(Fl_TR$Fl)))
+
+png("Graphs//CorrFl_TS.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fl_TR$TSRain)),as.numeric(paste(Fl_TR$Fl)),ylab="% trees in flower",xlab="Last 6 months rainfall",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fl_TR$Fl))~as.numeric(paste(Fl_TR$TSRain))), col="red")
+mtext(paste(" p-value = ",corFl_TS$p.value))
+dev.off()
 
 ## 3.1 Fruiting with monthly min-max temperature
 
 Fr_Tmin = merge(dRfr,dTMin,by="Date")
-corFr_Tmin=cor.test(Fr_Tmin$Rfr,as.numeric(paste(Fr_Tmin$Value)))
+corFr_Tmin=cor.test(as.numeric(paste(Fr_Tmin$Value)),Fr_Tmin$Rfr)
+
+png("Graphs//CorrFr_Tmin.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fr_Tmin$Value)),as.numeric(paste(Fr_Tmin$Rfr)),ylab="% trees in fruits",xlab="Minimum monthly temperature",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fr_Tmin$Rfr))~as.numeric(paste(Fr_Tmin$Value))), col="red")
+mtext(paste(" p-value = ",corFr_Tmin$p.value))
+dev.off()
+
 Fr_Tmax = merge(dRfr,dTMax,by="Date")
-corFr_Tmax=cor.test(Fr_Tmax$Rfr,as.numeric(paste(Fr_Tmax$Value)))
+corFr_Tmax=cor.test(as.numeric(paste(Fr_Tmax$Value)),Fr_Tmax$Rfr)
+
+png("Graphs//CorrFr_Tmax.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fr_Tmax$Value)),as.numeric(paste(Fr_Tmax$Rfr)),ylab="% trees in fruits",xlab="Maximum monthly temperature",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fr_Tmax$Rfr))~as.numeric(paste(Fr_Tmax$Value))), col="red")
+mtext(paste(" p-value = ",corFr_Tmax$p.value))
+dev.off()
+
 #3.2 Flowerinf with Total Rainfall
 Fl_Tmin = merge(dFl,dTMin,by="Date")
-corFl_Tmin=cor.test(as.numeric(Fl_Tmin$Fl),as.numeric(paste(Fl_Tmin$Value)))
+corFl_Tmin=cor.test(as.numeric(paste(Fl_Tmin$Value)),as.numeric(Fl_Tmin$Fl))
+
+png("Graphs//CorrFl_Tmin.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fl_Tmin$Value)),as.numeric(paste(Fl_Tmin$Fl)),ylab="% trees in flower",xlab="Minimum monthly temperature",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fl_Tmin$Fl))~as.numeric(paste(Fl_Tmin$Value))), col="red")
+mtext(paste(" p-value = ",corFl_Tmin$p.value))
+dev.off()
+
 Fl_Tmax = merge(dFl,dTMax,by="Date")
-corFl_Tmax=cor.test(as.numeric(Fl_Tmax$Fl),as.numeric(paste(Fl_Tmax$Value)))
+corFl_Tmax=cor.test(as.numeric(paste(Fl_Tmax$Value)),as.numeric(Fl_Tmax$Fl))
+
+png("Graphs//CorrFl_Tmax.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fl_Tmax$Value)),as.numeric(paste(Fl_Tmax$Fl)),ylab="% trees in flowers",xlab="Maximum monthly temperature",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fl_Tmax$Fl))~as.numeric(paste(Fl_Tmax$Value))), col="red")
+mtext(paste(" p-value = ",corFl_Tmax$p.value))
+dev.off()
 
 ## 4.1 Fruiting with Daylength
 
 Fr_DL = merge(dRfr,DL,by="Date")
-corFr_DL=cor.test(Fr_DL$Rfr,as.numeric(paste(Fr_DL$Value)))
+corFr_DL=cor.test(as.numeric(paste(Fr_DL$Value)),as.numeric(paste(Fr_DL$Rfr)))
+
+png("Graphs//CorrFr_DL.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fr_DL$Value)),as.numeric(paste(Fr_DL$Rfr)),ylab="% trees in fruits",xlab="Day length",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fr_DL$Rfr))~as.numeric(paste(Fr_DL$Value))), col="red")
+mtext(paste(" p-value = ",corFr_DL$p.value))
+dev.off()
+
 #1.2 Flowerinf with Total Rainfall
 Fl_DL = merge(dFl,DL,by="Date")
-corFl_DL=cor.test(as.numeric(Fl_DL$Fl),as.numeric(paste(Fl_DL$Value)))
+corFl_DL=cor.test(as.numeric(paste(Fl_DL$Value)),as.numeric(Fl_DL$Fl))
+
+png("Graphs//CorrFl_DL.png",width=1080,height=720,units = "px", pointsize = 20)
+plot(as.numeric(paste(Fl_DL$Value)),as.numeric(paste(Fl_DL$Fl)),ylab="% trees in flower",xlab="Day length",pch=20,col="navy")
+abline(lm(as.numeric(paste(Fl_DL$Fl))~as.numeric(paste(Fl_DL$Value))), col="red")
+mtext(paste(" p-value = ",corFl_DL$p.value))
+dev.off()
+
+#Write out correlation results
+estimate=rbind(FrTR=corFr_TR$estimate,FlTR=corFl_TR$estimate,FrTS=corFr_TS$estimate,FlTS=corFl_TS$estimate,Fr_Tmin=corFr_Tmin$estimate,Fr_Tmax=corFr_Tmax$estimate,Fl_Tmin=corFl_Tmin$estimate,Fl_Tmax=corFl_Tmax$estimate,Fr_DL=corFr_DL$estimate,Fl_DL=corFl_DL$estimate)
+pval=rbind(FrTR=corFr_TR$p.value,FlTR=corFl_TR$p.value,FrTS=corFr_TS$p.value,FlTS=corFl_TS$p.value,Fr_Tmin=corFr_Tmin$p.value,Fr_Tmax=corFr_Tmax$p.value,Fl_Tmin=corFl_Tmin$p.value,Fl_Tmax=corFl_Tmax$p.value,Fr_DL=corFr_DL$p.value,Fl_DL=corFl_DL$p.value)
+
+corrDat= cbind(estimate,pval)
+
+write.csv(corrDat,file="PhenologyWeatherCorrelations.csv")
+
+#Scatter plots
 
