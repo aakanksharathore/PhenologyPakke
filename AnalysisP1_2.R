@@ -589,5 +589,7 @@ corrDat= cbind(estimate,pval)
 
 write.csv(corrDat,file="PhenologyWeatherCorrelations.csv")
 
-#Scatter plots
+#Could you also do with Leaf flush (young leaves only)?
+
+#Would also need it separately for Animal-dispersed, Bird-dispersed, Wind-dispersed.
 
